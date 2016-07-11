@@ -68,12 +68,23 @@ QString* Send2XBMCMainWindow::setJsonRequest()
 {
     QString *content = new QString("{\"jsonrpc\": \"2.0\", \"method\": \"Player.Open\", \"params\":{\"item\": {\"file\" : \"plugin://plugin.video.youtube/?action=play_video&videoid=");
     QString temp = ui->lineEdit->text();
-    QRegularExpression rx("(v[/=])([a-zA-Z0-9\\_\\-])+&?");
-    QRegularExpressionMatch match = rx.match(temp);
-    temp = match.captured(0).remove(0, 2);
-    if(temp.contains('&'))
+
+    if(temp.contains("youtu.be"))
     {
-        temp.chop(1);
+        QRegularExpression rx("(youtu.be/)([a-zA-Z0-9\\_\\-])+&?");
+        QRegularExpressionMatch match = rx.match(temp);
+        temp = match.captured(0).remove(0, 9);
+//        qDebug() << temp;
+    }
+    else
+    {
+        QRegularExpression rx("(v[/=])([a-zA-Z0-9\\_\\-])+&?");
+        QRegularExpressionMatch match = rx.match(temp);
+        temp = match.captured(0).remove(0, 2);
+        if(temp.contains('&'))
+        {
+            temp.chop(1);
+        }
     }
 //    qDebug() << temp ;
     content->append(temp);
