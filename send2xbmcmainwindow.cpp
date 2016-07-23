@@ -20,7 +20,7 @@ Send2XBMCMainWindow::Send2XBMCMainWindow(QWidget *parent) :
 
     }
     ui->comboBox_2->addItem("Play");
-    ui->comboBox_2->addItem("Enque");
+    ui->comboBox_2->addItem("Enqueue");
 }
 
 Send2XBMCMainWindow::~Send2XBMCMainWindow()
@@ -69,9 +69,9 @@ void Send2XBMCMainWindow::replyFinished(QNetworkReply* replyDone)
 QString* Send2XBMCMainWindow::setJsonRequest()
 {
     QString *content;
-    if(ui->comboBox_2->currentText() == "Enque")
+    if(ui->comboBox_2->currentText() == "Enqueue")
     {
-        qDebug() << "Current Selection: "<< ui->comboBox_2->currentText();
+//        qDebug() << "Current Selection: "<< ui->comboBox_2->currentText();
         content = new QString("{\"jsonrpc\": \"2.0\", \"method\": \"Playlist.Add\", \"params\":{\"playlistid\": 1, \"item\": {\"file\" : \"plugin://plugin.video.youtube/?action=play_video&videoid=");
     }
     else
