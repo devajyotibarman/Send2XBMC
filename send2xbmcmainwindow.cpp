@@ -19,6 +19,8 @@ Send2XBMCMainWindow::Send2XBMCMainWindow(QWidget *parent) :
         ui->comboBox->addItem(line);
 
     }
+    ui->comboBox_2->addItem("Play");
+    ui->comboBox_2->addItem("Enque");
 }
 
 Send2XBMCMainWindow::~Send2XBMCMainWindow()
@@ -66,7 +68,16 @@ void Send2XBMCMainWindow::replyFinished(QNetworkReply* replyDone)
 
 QString* Send2XBMCMainWindow::setJsonRequest()
 {
-    QString *content = new QString("{\"jsonrpc\": \"2.0\", \"method\": \"Player.Open\", \"params\":{\"item\": {\"file\" : \"plugin://plugin.video.youtube/?action=play_video&videoid=");
+    QString *content;
+    if(ui->comboBox_2->currentText() == "Enque")
+    {
+        qDebug() << "Current Selection: "<< ui->comboBox_2->currentText();
+        content = new QString("{\"jsonrpc\": \"2.0\", \"method\": \"Playlist.Add\", \"params\":{\"playlistid\": 1, \"item\": {\"file\" : \"plugin://plugin.video.youtube/?action=play_video&videoid=");
+    }
+    else
+    {
+        content = new QString("{\"jsonrpc\": \"2.0\", \"method\": \"Player.Open\", \"params\":{\"item\": {\"file\" : \"plugin://plugin.video.youtube/?action=play_video&videoid=");
+    }
     QString temp = ui->lineEdit->text();
 
     if(temp.contains("youtu.be"))
@@ -96,5 +107,6 @@ void Send2XBMCMainWindow::on_pushButton_2_clicked()
 {
     QMessageBox m;
     m.setText(QString("(c) Devajyoti Barman, 2016"));
+    m.setWindowIcon(QIcon(":/icons/icon.png"));
     m.exec();
 }
