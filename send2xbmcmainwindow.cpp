@@ -6,19 +6,33 @@ Send2XBMCMainWindow::Send2XBMCMainWindow(QWidget *parent) :
     ui(new Ui::Send2XBMCMainWindow)
 {
     ui->setupUi(this);
-    iniFile = new QFile(".send2XBMC.ini");
-    if(!iniFile->open(QIODevice::ReadWrite| QIODevice::Text))
+    qDebug() << QStandardPaths::locate(QStandardPaths::HomeLocation,
+                                       QString(),
+                                       QStandardPaths::LocateDirectory).append((".send2XBMC.ini"));
+
+    iniFile = new QFile(QStandardPaths::locate(QStandardPaths::HomeLocation,
+                                               QString(),
+                                               QStandardPaths::LocateDirectory).append((".send2XBMC.ini")));
+    if(!iniFile->open(QIODevice::ReadWrite | QIODevice::Text))
     {
         qDebug() << "Cannot Open INI File";
     }
+
     QTextStream in(iniFile);
     while (!in.atEnd())
     {
         QString line = in.readLine();
+        xbmcList << line;
 //        qDebug() << line;
         ui->comboBox->addItem(line);
-
     }
+
+//    int i = 0;
+//    while(i < xbmcList.size())
+//    {
+//        qDebug() << xbmcList.at(i++);
+//    }
+
     ui->comboBox_2->addItem("Play");
     ui->comboBox_2->addItem("Enqueue");
 }
@@ -60,10 +74,18 @@ void Send2XBMCMainWindow::on_lineEdit_cursorPositionChanged(int arg1, int arg2)
 
 void Send2XBMCMainWindow::replyFinished(QNetworkReply* replyDone)
 {
-//    qDebug("Finished Request!");
-    ui->comboBox->addItem(ui->comboBox->currentText());
-    QTextStream out(iniFile);
-    out << ui->comboBox->currentText() << endl;
+//    qDebug() << "Finished Request!" << ui->comboBox->currentText();
+    if(xbmcList.contains(ui->comboBox->currentText()))
+    {
+//        qDebug() << "Found a child";
+    }
+    else
+    {
+        ui->comboBox->addItem(ui->comboBox->currentText());
+        xbmcList << ui->comboBox->currentText();
+        QTextStream out(iniFile);
+        out << ui->comboBox->currentText() << endl;
+    }
 }
 
 QString* Send2XBMCMainWindow::setJsonRequest()

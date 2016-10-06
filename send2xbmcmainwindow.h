@@ -8,6 +8,8 @@
 #include <QLoggingCategory>
 #include <QFile>
 #include <QMessageBox>
+#include <QList>
+#include <QStandardPaths>
 
 namespace Ui {
 class Send2XBMCMainWindow;
@@ -35,6 +37,7 @@ private:
     Ui::Send2XBMCMainWindow *ui;
     QFile *iniFile;
     QString* setJsonRequest(void);
+    QList<QString> xbmcList;
 };
 
 #endif // SEND2XBMCMAINWINDOW_H
